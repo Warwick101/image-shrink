@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/image-shrink",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "image-shrink"
+    }
+  },
+  "defaultProject": "image-shrink",
+  "cli": {
+    "analytics": "dbd01375-f59d-46fa-a52d-a8ef92aeeef8"
+  }
 }
