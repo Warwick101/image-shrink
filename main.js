@@ -1,14 +1,36 @@
-const { app, BrowserWindow } = require('electron');
+
+const { app, BrowserWindow, Menu } = require('electron');
 const url = require("url");
 const path = require("path");
 
 let mainWindow
-process.env.NODE_ENV = 'production'
+let aboutWindow
+process.env.NODE_ENV = 'development'
 
 const isDev = process.env.NODE_ENV !== 'production'
 const isMac = process.platform === 'darwin'
-console.log(process.platform)
 
+const createAboutWindow = () => {
+  aboutWindow = new BrowserWindow({
+    height: 300,
+    width: 300,
+    backgroundColor: "#ffffff",
+    icon: path.join(__dirname, `/dist/assets/logo.png`),
+    resizable: false
+  });
+
+  // and load the index.html of the app.
+  aboutWindow.loadFile(`./dist/index.html`);
+
+  // Open the DevTools.
+  // mainWindow.webContents.openDevTools();
+
+  // Event when the window is closed.
+  mainWindow.on('closed', function () {
+    mainWindow = null
+  })
+
+};
 
 const createMainWindow = () => {
   // Create the browser window.
@@ -24,7 +46,7 @@ const createMainWindow = () => {
   mainWindow.loadFile(`./dist/index.html`);
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Event when the window is closed.
   mainWindow.on('closed', function () {
@@ -38,7 +60,64 @@ const createMainWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 // Create window on electron initial
-app.on('ready', createMainWindow);
+app.on('ready', () => {
+  createMainWindow()
+
+  const mainMenu = Menu.buildFromTemplate(menu)
+  Menu.setApplicationMenu(mainMenu)
+
+  // No longer needed since we have roles
+  // globalShortcut.register('CmdOrCtrl+R', () => mainWindow.reload())
+  // globalShortcut.register(isMac ? 'Command+Alt+I' : 'Ctrl+Shift+I', () => mainWindow.toggleDevTools())
+  mainWindow.on('closed', () => mainWindow = null)
+});
+
+const menu = [
+  ...(isMac ? [{
+    label: app.name,
+    submenu: [{
+      label: 'About',
+      click: createAboutWindow,
+    }]
+  }] : []),
+  {
+    // label: 'File',
+    // submenu: [
+    //   {
+    //   label: 'Quit',
+    //     // accelerator: isMac ? 'Command+W' : 'Ctrl+W',
+    //     // Same as
+    //     accelerator: 'CmdOrCtrl+W',
+    //     click: () => app.quit()
+    //   }
+    // ]
+
+    //Same as
+    role: 'fileMenu',
+  },
+  ...(!isMac ? [
+    {
+      label: 'Help',
+      submenu: [
+        {
+        label: 'About',
+        click: createAboutWindow
+      },
+      ],
+    },
+  ] : []),
+  ...(isDev ? [
+    {
+      label: 'Developer',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { type: 'separator' },
+        { role: 'toggledevtools' },
+      ]
+    }
+  ] : [])
+];
 
 // Quit when all windows are closed.
 
