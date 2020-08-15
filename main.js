@@ -10,6 +10,33 @@ process.env.NODE_ENV = 'development'
 const isDev = process.env.NODE_ENV !== 'production'
 const isMac = process.platform === 'darwin'
 
+
+
+const createMainWindow = () => {
+  // Create the browser window.
+  mainWindow = new BrowserWindow({
+    height: 600,
+    width: 800,
+    backgroundColor: "#ffffff",
+    icon: path.join(__dirname, `/dist/assets/logo.png`),
+    resizable: isDev,
+    webPreferences: {
+      nodeIntegration: true,
+    }
+  });
+
+  // and load the index.html of the app.
+  mainWindow.loadFile(`./dist/index.html`);
+
+  // Open the DevTools.
+  // mainWindow.webContents.openDevTools();
+
+  // Event when the window is closed.
+  mainWindow.on('closed', function () {
+    mainWindow = null
+  })
+};
+
 const createAboutWindow = () => {
   aboutWindow = new BrowserWindow({
     height: 300,
@@ -31,30 +58,6 @@ const createAboutWindow = () => {
   })
 
 };
-
-const createMainWindow = () => {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    height: 600,
-    width: 800,
-    backgroundColor: "#ffffff",
-    icon: path.join(__dirname, `/dist/assets/logo.png`),
-    resizable: isDev
-  });
-
-  // and load the index.html of the app.
-  mainWindow.loadFile(`./dist/index.html`);
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
-
-  // Event when the window is closed.
-  mainWindow.on('closed', function () {
-    mainWindow = null
-  })
-
-};
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
