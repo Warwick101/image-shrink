@@ -2,11 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="src/assets/css/all.min.css" />
-  <link rel="stylesheet" href="src/assets/css/materialize.min.css" />
-  <link rel="stylesheet" href="src/assets/css/style.css" />
-  <title>ImageShrink</title>
   <base href="./">
+  <title>ImageShrink</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta
     http-equiv="Content-Security-Policy"
@@ -14,41 +11,24 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
+<button id="come">
+  fdsfsdfsd
+</button>
   <app-root></app-root>
-  <script src="src/assets/js/materialize.min.js"></script>
-  <script>
-      const path = require('path')
-      const os = require('os')
-      const { ipcRenderer } = require('electron')
-
-      const form = document.getElementById('image-form')
-      const slider = document.getElementById('slider')
-      const img = document.getElementById('img')
-
-      document.getElementById('output-path').innerText = path.join(
-          os.homedir(),
-          'imageshrink'
-      )
-
-      //   Onsubmit
-      form.addEventListener('submit', (e) => {
-          e.preventDefault()
-
-          const imgPath = img.files[0].path
-          const quality = slider.value
-
-          ipcRenderer.send('image:minimize', {
-              imgPath,
-              quality,
-          })
-      })
-
-      //   On done
-      ipcRenderer.on('image:done', () => {
-          M.toast({
-              html: `Image resized to ${slider.value}% quality`,
-          })
-      })
-  </script>
 </body>
+<script>
+  const { ipcRenderer } = require('electron')
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('come').addEventListener('click', function () {
+      test();
+      console.log('yip')
+    });
+  });
+
+  function test () {
+    console.log('yip')
+  }
+
+</script>
 </html>

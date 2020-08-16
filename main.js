@@ -16,18 +16,24 @@ const createMainWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     height: 600,
-    width: 800,
+    width: isDev ? 800: 500,
     backgroundColor: "#ffffff",
     icon: path.join(__dirname, `/dist/assets/logo.png`),
     resizable: isDev,
+    protocol: 'file:',
+    slashes: true,
     webPreferences: {
       nodeIntegration: true,
+
     }
   });
 
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
+
   // and load the index.html of the app.
   mainWindow.loadFile(`./dist/index.html`);
-
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
 
@@ -56,7 +62,6 @@ const createAboutWindow = () => {
   mainWindow.on('closed', function () {
     mainWindow = null
   })
-
 };
 
 // This method will be called when Electron has finished
